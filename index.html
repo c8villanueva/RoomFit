@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#f6f3ee" />
+    <title>RoomFit — Shop for your room</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <div><span class="eyebrow">YOUR ROOM, YOUR SHORTLIST</span><h1>RoomFit</h1></div>
+      <p>Try a find in your space before you bring it home.</p>
+    </header>
+    <main>
+      <section class="panel room-panel">
+        <div class="section-heading"><span class="step">01</span><div><h2>Start with your room</h2><p>Upload a photo taken from the angle you want to preview.</p></div></div>
+        <label class="upload-card" for="roomPhoto"><span class="upload-icon">＋</span><strong>Add a room photo</strong><small>Keep several room photos for side-by-side recommendations</small><input id="roomPhoto" type="file" accept="image/png,image/jpeg" /></label>
+        <div class="room-controls room-name-row"><label>Next room name (optional)<input id="roomName" type="text" maxlength="36" placeholder="e.g. Main bedroom" /></label><button id="removeRoom" class="button secondary" disabled>Remove active room</button></div>
+        <div id="savedRooms" class="saved-rooms"><p class="empty-state">No saved rooms yet. Add a room photo above.</p></div>
+        <div class="room-cv-card">
+          <div class="cv-card-heading"><span class="cv-icon">◉</span><div><small>COMPUTER VISION · SCENE RECOGNITION</small><strong>Detect the room type</strong><p>Analyze this room photo, then review or change the suggested category.</p></div></div>
+          <div class="room-controls">
+            <label>Room type <select id="roomType"><option value="">Choose a room type</option><option>Living room</option><option>Bedroom</option><option>Kitchen</option><option>Bathroom</option><option>Dining room</option><option>Home office</option><option>Entryway</option></select></label>
+            <button id="suggestRoom" class="button" disabled>Analyze room photo</button>
+          </div>
+          <p id="roomStatus" class="status" role="status">Add a room photo to start scene recognition.</p>
+        </div>
+        <div id="palette" class="palette-panel" hidden>
+          <div class="room-palette-block"><strong>Base room photo · CV color profile</strong><div id="paletteSwatches" class="palette-swatches"></div><p id="paletteText"></p></div>
+          <div class="room-palette-block updated-room-palette"><strong>Updated room profile · placed items included</strong><div id="updatedPaletteSwatches" class="palette-swatches"></div><p id="updatedPaletteText"></p></div>
+        </div>
+      </section>
+
+      <section class="panel item-panel">
+        <div class="section-heading"><span class="step">02</span><div><h2>Add something you found</h2><p>Take a clear photo of one item. Plain backgrounds make cutouts cleaner.</p></div></div>
+        <div class="product-form">
+          <label class="file-label">Product photo<input id="productPhoto" type="file" accept="image/png,image/jpeg" /></label>
+          <label>Item name<input id="productName" type="text" maxlength="40" placeholder="e.g. oak side table" /></label>
+          <label>Known width (cm, optional)<input id="knownWidth" type="number" min="1" max="2000" step="1" placeholder="From product label" /></label>
+          <button id="addProduct" class="button" disabled>Analyze item</button>
+        </div>
+        <label class="background-toggle"><input id="removeBackground" type="checkbox" checked /><span><strong>Remove photo background</strong><small>Turn this off for art prints, framed pieces, or when you want to keep the full photo.</small></span></label>
+        <label class="sensitivity">Cutout sensitivity <span id="sensitivityValue">45</span><input id="threshold" type="range" min="15" max="100" value="45" /></label>
+        <p id="productStatus" class="status" role="status">Upload a product photo. Background removal works best when the item contrasts with its background.</p>
+        <div id="products" class="product-list"><p class="empty-state">Your saved finds will appear here.</p></div>
+        <label class="item-use-label">Selected item name<input id="selectedProductName" type="text" maxlength="40" placeholder="Detected item name" disabled /></label>
+        <label class="item-use-label">Item use (correct the suggestion if needed)<select id="itemUse"><option value="auto">Use image suggestion</option><option value="flexible">Flexible decor / art</option><option value="Kitchen">Kitchen item</option><option value="Living room">Living-room seating or rug</option><option value="Bedroom">Bedroom item</option><option value="Dining room">Dining item</option><option value="Home office">Home-office item</option><option value="Bathroom">Bathroom item</option></select></label>
+        <label class="item-use-label">Show this item in<select id="productRoom"><option value="">Choose a room</option></select></label>
+        <button id="deleteFind" class="button secondary delete-find" type="button" hidden>Delete selected find</button>
+        <div class="room-fit-card"><span class="room-fit-symbol">⌂</span><div><small>COMPUTER VISION · ITEM RECOGNITION &amp; ROOM RECOMMENDATION</small><strong id="typicalRoomValue">Upload an item photo</strong><p id="typicalRoomReason">Computer vision will identify the item and suggest its usual room separately from color matching.</p></div></div>
+        <div class="color-analysis"><div class="color-analysis-heading"><span>COMPUTER VISION · COLOR PROFILE</span><strong>How the item colors compare with your rooms</strong></div><div class="color-pair"><div><small>ITEM PROFILE</small><div id="itemColorSwatches" class="analysis-swatches"></div></div><span class="color-arrow">→</span><div><small>ROOM + OTHER PLACED FINDS</small><div id="roomColorSwatches" class="analysis-swatches"></div></div></div><div class="affinity-meter"><span id="affinityFill"></span></div><p id="colorAnalysisText">Add a room and an item to see their sampled color profiles.</p><div id="roomColorScores" class="room-color-scores"></div></div>
+        <div class="recommendations"><strong>Room suggestions for this item</strong><div id="itemSuggestion" class="suggestion-copy">Add a room and an item to compare room type and color affinity.</div></div>
+        <div id="measurementNote" class="measurement-note" hidden></div>
+      </section>
+
+      <section class="panel preview-panel">
+        <div class="section-heading"><span class="step">03</span><div><h2>Try it in your space</h2><p>Drag a product to move it. Select it to change its displayed size.</p></div></div>
+        <div class="preview-room-control"><label for="activeRoomSelect"><span>ACTIVE ROOM</span><select id="activeRoomSelect" disabled><option value="">Add a room in step 1</option></select></label><p id="activeRoomSummary">Choose which saved room to preview.</p></div>
+        <div id="roomStage" class="room-stage"><div class="stage-placeholder"><span>⌂</span><strong>Your room preview will appear here</strong><small>Upload your room photo above to begin</small></div></div>
+        <div id="placementControls" class="placement-controls" hidden><label>Selected item <select id="selectedProduct"></select></label><label>Displayed size <input id="itemScale" type="range" min="10" max="100" value="38" /></label><button id="removeProduct" class="button secondary">Remove item</button></div>
+        <p class="disclaimer">Preview is a movable photo mockup, not augmented reality or a scale-accurate fit check. Perspective, lighting, and color can look different in person.</p>
+      </section>
+    </main>
+    <footer>RoomFit · Photos are processed in your browser. The image model downloads on first room or item suggestion.</footer>
+    <script src="app.js" defer></script>
+  </body>
+</html>
